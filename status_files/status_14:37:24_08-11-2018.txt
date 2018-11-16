@@ -1,0 +1,12 @@
+TelegramBot.py
+__init__.py
+__pycache__
+log.txt
+main.py
+requirements.txt
+scripts
+send.py
+start.sh
+status_files
+system_status_files
+venv
