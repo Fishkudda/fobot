@@ -74,7 +74,9 @@ Please use me responsible\n
 
     def db_size(self,bot,update):
         size = os.path.getsize('server.db')
-        msg = "Size: {}".format(size)
+        if size > 0:
+            size = size /1000000
+        msg = "Size: {}MB".format(size)
         self.dispatcher.bot.sendMessage(self.chat_id,msg)
 
     def get_id(self,bot,update):

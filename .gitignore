@@ -2,3 +2,4 @@ start.sh
 start_debug.sh
 venv
 __pycache__
+.idea
