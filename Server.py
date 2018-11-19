@@ -3,11 +3,10 @@ import re
 import threading
 import datetime
 import time as t
-import sys
 import Database
 
 PATH_TO_SERVER = str(os.environ.get('PATH_TO_SERVER'))
-SERVER_NAME = "Friends Only Daddelstube #2"
+SERVER_NAME = str(os.environ.get('SERVER_NAME'))
 SCREEN_NAME = str(os.environ.get('SCREEN_NAME'))
 
 
@@ -271,8 +270,6 @@ class Server:
 
         self.update_counter = self.update_counter + 1
 
-
-
         return self
 
 
@@ -304,7 +301,8 @@ class Player:
 
     def ban_player(self):
         screen_id = self.server.screen_id
-        sys_var = "screen -S {} -X stuff 'kickid {}\r'".format(screen_id,
+        sys_var = "screen -S {} -X stuff 'banid {}\r'".format(screen_id,
                                                                self.id)
         os.system(sys_var)
         return self
+

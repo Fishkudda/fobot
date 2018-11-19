@@ -4,7 +4,8 @@ from Server import Server
 import telegram
 import Database
 import re
-
+import math
+import time
 
 class TelegramBot:
     def __init__(self, token, chat_id,debug=False):
@@ -19,7 +20,15 @@ class TelegramBot:
         self.admins = [651421362,742523989,85438832]
         self.status = {}
         self.server = Server()
-        self.debug=debug
+        self.debug = debug
+        self.menu_reg = ['Status',
+                         'Maplist',
+                         'Move',
+                         'Ban',
+                         'Kick',
+                         'DB Size',
+                         'Map Stats',
+                         'Players']
 
 
         # Command Handler
@@ -39,6 +48,7 @@ class TelegramBot:
         handle_db_size = CommandHandler('get_db_size',self.db_size)
         handle_get_maps_stats = CommandHandler('maplist_stats',self.map_stats)
         handle_get_all_players = CommandHandler('getPlayers',self.get_all_player)
+        handle_bot = CommandHandler('bot',self.bot_menu)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
@@ -60,6 +70,7 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_db_size)
         self.dispatcher.add_handler(handle_get_maps_stats)
         self.dispatcher.add_handler(handle_get_all_players)
+        self.dispatcher.add_handler(handle_bot)
 
     def help(self,bot,update):
         help_ms = """
@@ -85,10 +96,45 @@ Please use me responsible\n
             if re.match(r'^STEAM_',player.steam_id):
                 msg = msg + player.name + '\n' + player.steam_id + '\n'
 
-        print(msg)
+        partial = math.ceil(len(msg)/2000)
 
-        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text=msg)
+        part_msg = []
 
+        if partial > 1:
+            chunked = [players[i::partial]for i in range(partial)]
+
+            for player_list in chunked:
+                chunked_msg = ""
+                for player in player_list:
+                    if re.match(r'^STEAM_', player.steam_id):
+                        chunked_msg = chunked_msg + player.name + '\n' + player.steam_id + '\n'
+                part_msg.append(chunked_msg)
+
+        else:
+            part_msg.append(msg)
+
+
+        for msg_e in part_msg:
+            self.dispatcher.bot.sendMessage(chat_id=self.chat_id, text=msg_e)
+            time.sleep(3)
+
+    def bot_menu(self,bot,update):
+        message_id = update._effective_message.message_id
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
+        custom_keyboard = []
+
+        for entry in self.menu_reg:
+            custom_keyboard.append([entry])
+        reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
+                                                    selective=True,
+                                                    one_time_keyboard=True)
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
+                                        reply_markup=reply_markup,
+                                        text="Menu",
+                                        reply_to_message_id=message_id)
 
     def get_full_log(self):
         pass
@@ -146,6 +192,24 @@ Please use me responsible\n
             for player in self.server.get_players():
                 if player.name == update.message.text:
                     player.to_spectators()
+        if usecase == "Menu":
+            if update.message.text == "Status":
+                self.server_status(bot=bot,update=update)
+            if update.message.text == "Maplist":
+                self.map_list(bot=bot,update=update)
+            if update.message.text == "Move":
+                self.move_player(bot=bot,update=update)
+            if update.message.text == "Kick":
+                self.kick_id(bot=bot,update=update)
+            if update.message.text == "DB Size":
+                self.db_size(bot=bot,update=update)
+            if update.message.text == "Ban":
+                self.ban_player(bot=bot,update=update)
+            if update.message.text == 'Map Stats':
+                self.map_stats(bot=bot,update=update)
+            if update.message.text == "Players":
+                self.get_all_player(bot=bot, update=update)
+
 
     def just_say(self,bot,update):
         self.server.just_say(" ".join(update.message.text.split(' ')[1:]))

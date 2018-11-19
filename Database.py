@@ -167,6 +167,11 @@ def print_all_server_status():
             print("Error cant print status")
             print(x)
 
+@db_session
+def create_test_user():
+    for i in range(1000):
+        add_player(datetime.utcnow(),str(i),"STEAM_1_{}".format(i))
+
 
 def database_create_maps(map_list):
     dt = datetime.utcnow()
@@ -178,4 +183,5 @@ def print_all_maps():
     for x in get_all_maps():
         msg = "{} {} {}".format(x.name, x.played, x.value)
         print(msg)
+
 

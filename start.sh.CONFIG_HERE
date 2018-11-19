@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+export LC_ALL=en_US.UTF-8
+export BOT_TOKEN=<<YOUR TELEGRAM BOT TOKEN>>
+export CHAT_ID=<<YOUR CHAT ID>>
+export SERVER_NAME=<<SERVER NAME>>
+export PATH_TO_SERVER=<<PATH TO THE SERVER>> example $HOME/server/csgo
+export SCREEN_NAME=<<SCREEN NAME>>
+export SAVE_STATISTICS=0
+
+while true
+do
+sleep 10
+if pgrep -f "SCREEN -L -S fobot -d -m python3 main.py" > /dev/null
+then
+    echo "Running"
+else
+    echo "Restart Fobot"
+    sleep 6
+    pip3 install -r requirements.txt
+    screen -L -S fobot -d -m python3 main.py
+    sleep 4
+fi
+done

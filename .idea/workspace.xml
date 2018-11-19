@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0299903-412a-44a6-b2cd-77a59c0bdc62" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/start.sh.CONFIG_HERE" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TelegramBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/TelegramBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/status_files/status_13:15:24.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/status_files/status_13:16:01_08-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/status_files/status_14:00:36_08-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/status_files/status_14:37:24_08-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_11:22:42_09-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_13:33:21_08-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_13:49:31_08-11-2018.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_14:00:08_08-11-2018.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,6 +37,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="CONFIG_HERE" value="1" />
           <entry key="db" value="8" />
           <entry key="gf" value="1" />
           <entry key="gitignore" value="4" />
@@ -39,7 +47,7 @@
           <entry key="py" value="46" />
           <entry key="python3" value="2" />
           <entry key="sh" value="12" />
-          <entry key="txt" value="13" />
+          <entry key="txt" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -47,15 +55,16 @@
           <entry key="Bash" value="12" />
           <entry key="Ini" value="3" />
           <entry key="Markdown" value="1" />
-          <entry key="PLAIN_TEXT" value="30" />
+          <entry key="PLAIN_TEXT" value="39" />
           <entry key="Python" value="46" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
+          <entry key="CONFIG_HERE" value="122" />
           <entry key="dummy" value="1" />
           <entry key="gitignore" value="107" />
-          <entry key="py" value="27125" />
+          <entry key="py" value="28743" />
           <entry key="sh" value="1023" />
           <entry key="txt" value="14" />
         </counts>
@@ -63,8 +72,8 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Bash" value="1023" />
-          <entry key="PLAIN_TEXT" value="122" />
-          <entry key="Python" value="27125" />
+          <entry key="PLAIN_TEXT" value="244" />
+          <entry key="Python" value="28743" />
         </counts>
       </usages-collector>
     </session>
@@ -72,32 +81,14 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tp.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TelegramBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="86" selection-start-line="86" selection-end-line="86" />
+            <state relative-caret-position="255">
+              <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
               <folding>
                 <element signature="e#0#95#0" expanded="true" />
-                <marker date="1542624157367" expanded="true" signature="3402:3719" ph="..." />
-                <marker date="1542624157367" expanded="true" signature="3792:4175" ph="..." />
+                <marker date="1542634787259" expanded="true" signature="4729:5479" ph="..." />
+                <marker date="1542634787259" expanded="true" signature="5552:5935" ph="..." />
               </folding>
             </state>
           </provider>
@@ -106,8 +97,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="262" column="93" lean-forward="true" selection-start-line="262" selection-start-column="93" selection-end-line="262" selection-end-column="93" />
+            <state relative-caret-position="-1319">
+              <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -115,15 +106,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Database.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="84" column="40" lean-forward="true" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
+            <state relative-caret-position="540">
+              <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
-                <marker date="1542623121849" expanded="true" signature="2005:2038" ph="..." />
-                <marker date="1542623121849" expanded="true" signature="2075:2135" ph="..." />
+                <marker date="1542633720881" expanded="true" signature="2005:2038" ph="..." />
+                <marker date="1542633720881" expanded="true" signature="2075:2135" ph="..." />
+                <marker date="1542633720881" expanded="true" signature="4685:4782" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,7 +124,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
+            <state relative-caret-position="-75">
               <caret line="63" column="61" selection-start-line="63" selection-start-column="61" selection-end-line="63" selection-end-column="61" />
               <folding>
                 <element signature="e#47#82#0" expanded="true" />
@@ -143,26 +135,21 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fobot_runner.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/start.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+            <state relative-caret-position="45">
+              <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/log.txt">
-          <provider selected="true" editor-type-id="text-editor" />
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/start.sh.CONFIG_HERE">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -198,7 +185,6 @@
         <option value="$PROJECT_DIR$/gf" />
         <option value="$PROJECT_DIR$/alembic.ini" />
         <option value="$PROJECT_DIR$/alembic/versions/5e7a3bb696e7_init_db.py" />
-        <option value="$PROJECT_DIR$/start.sh" />
         <option value="$PROJECT_DIR$/database.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/stop.sh" />
@@ -210,6 +196,8 @@
         <option value="$PROJECT_DIR$/Database.py" />
         <option value="$PROJECT_DIR$/TelegramBot.py" />
         <option value="$PROJECT_DIR$/Server.py" />
+        <option value="$PROJECT_DIR$/start.sh" />
+        <option value="$PROJECT_DIR$/start.sh.CONFIG_HERE" />
       </list>
     </option>
   </component>
@@ -302,33 +290,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_14:00:08_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_13:49:31_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_13:33:21_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/sync.sh" />
-    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_11:22:42_09-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/status_files/status_14:37:24_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Player.py" />
-    <entry file="file://$PROJECT_DIR$/status_files/status_14:00:36_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/status_files/status_13:16:01_08-11-2018.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/cmd.txt" />
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
@@ -434,16 +397,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/start.sh">
+    <entry file="file://$PROJECT_DIR$/tp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+            <marker date="1542633720881" expanded="true" signature="2005:2038" ph="..." />
+            <marker date="1542633720881" expanded="true" signature="2075:2135" ph="..." />
+            <marker date="1542633720881" expanded="true" signature="4685:4782" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TelegramBot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#95#0" expanded="true" />
+            <marker date="1542634787259" expanded="true" signature="4729:5479" ph="..." />
+            <marker date="1542634787259" expanded="true" signature="5552:5935" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/status_files/status_13:15:24.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/status_files/status_13:16:01_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/status_files/status_14:37:24_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/status_files/status_14:00:36_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_11:22:42_09-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_13:33:21_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_13:49:31_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system_status_files/status_system_14:00:08_08-11-2018.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
+        <state relative-caret-position="-75">
           <caret line="63" column="61" selection-start-line="63" selection-start-column="61" selection-end-line="63" selection-end-column="61" />
           <folding>
             <element signature="e#47#82#0" expanded="true" />
@@ -452,44 +468,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tp.py">
+    <entry file="file://$PROJECT_DIR$/start.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TelegramBot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="86" selection-start-line="86" selection-end-line="86" />
-          <folding>
-            <element signature="e#0#95#0" expanded="true" />
-            <marker date="1542624157367" expanded="true" signature="3402:3719" ph="..." />
-            <marker date="1542624157367" expanded="true" signature="3792:4175" ph="..." />
-          </folding>
+          <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="262" column="93" lean-forward="true" selection-start-line="262" selection-start-column="93" selection-end-line="262" selection-end-column="93" />
+        <state relative-caret-position="-1319">
+          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Database.py">
+    <entry file="file://$PROJECT_DIR$/start.sh.CONFIG_HERE">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="84" column="40" lean-forward="true" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-            <marker date="1542623121849" expanded="true" signature="2005:2038" ph="..." />
-            <marker date="1542623121849" expanded="true" signature="2075:2135" ph="..." />
-          </folding>
+        <state relative-caret-position="45">
+          <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
         </state>
       </provider>
     </entry>
