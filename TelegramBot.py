@@ -164,7 +164,7 @@ Please use me responsible\n
         self.dispatcher.bot.sendMessage(self.chat_id, text=update.message.from_user.id)
 
     def get_chat_id(self,bot,update):
-        self.dispatcher.bot.sendMessage(self.chat_id, text=self.chat_id)
+        self.dispatcher.bot.sendMessage(chat_id=update.message.chat.id, text=update.message.chat.id)
 
     def request_update(self, bot, update):
         userid = update.message.from_user.id

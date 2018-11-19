@@ -2,24 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0299903-412a-44a6-b2cd-77a59c0bdc62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/start.sh.CONFIG_HERE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TelegramBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/TelegramBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/status_files/status_13:15:24.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/status_files/status_13:16:01_08-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/status_files/status_14:00:36_08-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/status_files/status_14:37:24_08-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_11:22:42_09-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_13:33:21_08-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_13:49:31_08-11-2018.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/system_status_files/status_system_14:00:08_08-11-2018.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/start.sh.CONFIG_HERE">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="45">
+                    <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="831222632">
@@ -37,13 +47,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="CONFIG_HERE" value="1" />
+          <entry key="CONFIG_HERE" value="2" />
           <entry key="db" value="8" />
           <entry key="gf" value="1" />
-          <entry key="gitignore" value="4" />
+          <entry key="gitignore" value="5" />
           <entry key="ini" value="3" />
           <entry key="mako" value="2" />
-          <entry key="md" value="1" />
+          <entry key="md" value="2" />
           <entry key="py" value="46" />
           <entry key="python3" value="2" />
           <entry key="sh" value="12" />
@@ -54,8 +64,8 @@
         <counts>
           <entry key="Bash" value="12" />
           <entry key="Ini" value="3" />
-          <entry key="Markdown" value="1" />
-          <entry key="PLAIN_TEXT" value="39" />
+          <entry key="Markdown" value="2" />
+          <entry key="PLAIN_TEXT" value="41" />
           <entry key="Python" value="46" />
         </counts>
       </usages-collector>
@@ -64,7 +74,8 @@
           <entry key="CONFIG_HERE" value="122" />
           <entry key="dummy" value="1" />
           <entry key="gitignore" value="107" />
-          <entry key="py" value="28743" />
+          <entry key="md" value="1090" />
+          <entry key="py" value="28768" />
           <entry key="sh" value="1023" />
           <entry key="txt" value="14" />
         </counts>
@@ -72,8 +83,9 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Bash" value="1023" />
+          <entry key="Markdown" value="1090" />
           <entry key="PLAIN_TEXT" value="244" />
-          <entry key="Python" value="28743" />
+          <entry key="Python" value="28768" />
         </counts>
       </usages-collector>
     </session>
@@ -81,14 +93,35 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="285">
+                <caret line="19" column="90" selection-start-line="19" selection-start-column="90" selection-end-line="19" selection-end-column="90" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TelegramBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+            <state relative-caret-position="245">
+              <caret line="166" column="100" selection-start-line="166" selection-start-column="100" selection-end-line="166" selection-end-column="100" />
               <folding>
                 <element signature="e#0#95#0" expanded="true" />
-                <marker date="1542634787259" expanded="true" signature="4729:5479" ph="..." />
-                <marker date="1542634787259" expanded="true" signature="5552:5935" ph="..." />
+                <marker date="1542636067040" expanded="true" signature="4729:5479" ph="..." />
+                <marker date="1542636067040" expanded="true" signature="5552:5935" ph="..." />
               </folding>
             </state>
           </provider>
@@ -143,15 +176,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/start.sh.CONFIG_HERE">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -172,7 +196,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/sync.sh" />
         <option value="$PROJECT_DIR$/Player.py" />
         <option value="$PROJECT_DIR$/venv/Database.py" />
@@ -194,10 +217,11 @@
         <option value="$PROJECT_DIR$/fobot_runner.sh" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Database.py" />
-        <option value="$PROJECT_DIR$/TelegramBot.py" />
         <option value="$PROJECT_DIR$/Server.py" />
         <option value="$PROJECT_DIR$/start.sh" />
         <option value="$PROJECT_DIR$/start.sh.CONFIG_HERE" />
+        <option value="$PROJECT_DIR$/TelegramBot.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -266,7 +290,7 @@
     <frame x="60" y="45" width="1799" height="1102" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22328459" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.071428575" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -293,16 +317,6 @@
     <entry file="file://$PROJECT_DIR$/sync.sh" />
     <entry file="file://$PROJECT_DIR$/Player.py" />
     <entry file="file://$PROJECT_DIR$/scripts/cmd.txt" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="135">
-            <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -380,13 +394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/log.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -413,18 +420,6 @@
             <marker date="1542633720881" expanded="true" signature="2005:2038" ph="..." />
             <marker date="1542633720881" expanded="true" signature="2075:2135" ph="..." />
             <marker date="1542633720881" expanded="true" signature="4685:4782" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TelegramBot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#95#0" expanded="true" />
-            <marker date="1542634787259" expanded="true" signature="4729:5479" ph="..." />
-            <marker date="1542634787259" expanded="true" signature="5552:5935" ph="..." />
           </folding>
         </state>
       </provider>
@@ -485,10 +480,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/start.sh.CONFIG_HERE">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TelegramBot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="166" column="100" selection-start-line="166" selection-start-column="100" selection-end-line="166" selection-end-column="100" />
+          <folding>
+            <element signature="e#0#95#0" expanded="true" />
+            <marker date="1542636067040" expanded="true" signature="4729:5479" ph="..." />
+            <marker date="1542636067040" expanded="true" signature="5552:5935" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="285">
+            <caret line="19" column="90" selection-start-line="19" selection-start-column="90" selection-end-line="19" selection-end-column="90" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
