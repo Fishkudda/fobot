@@ -8,7 +8,7 @@ import math
 import time
 
 ADMINS = [651421362,742523989,85438832]
-USERS = []
+USERS = [651421362,742523989,85438832]
 
 class TelegramBot:
     def __init__(self, token, chat_id,debug=False):
@@ -97,6 +97,7 @@ Please use me responsible\n
 
         if userid not in self.admins:
             return False
+
         players = Database.get_all_player()
         msg = ""
 
@@ -130,7 +131,7 @@ Please use me responsible\n
         message_id = update._effective_message.message_id
         userid = update.message.from_user.id
 
-        if (userid not in self.admins) or (userid not in self.users):
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
         custom_keyboard = []
 
@@ -150,8 +151,9 @@ Please use me responsible\n
     def map_stats(self,bot,update):
         userid = update.message.from_user.id
 
-        if (userid not in self.admins) or (userid not in self.users):
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
+
         maps = Database.get_maps_by_played()
         msg = ""
 
@@ -185,7 +187,7 @@ Please use me responsible\n
     def request_update(self, bot, update):
         userid = update.message.from_user.id
 
-        if (userid not in self.admins) or (userid not in self.users):
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
         usecase = ""
         bot = update._effective_message.reply_to_message.from_user.is_bot
@@ -241,7 +243,8 @@ Please use me responsible\n
             username = update.message.from_user.first_name + " " + update.message.from_user.last_name
         else:
             username = update.message.from_user.first_name
-        if (userid not in self.admins) or (userid not in self.users):
+
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
         custom_keyboard = []
 
@@ -262,7 +265,8 @@ Please use me responsible\n
             username = update.message.from_user.first_name + " " + update.message.from_user.last_name
         else:
             username = update.message.from_user.first_name
-        if (userid not in self.admins) or (userid not in self.users):
+
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
         custom_keyboard = []
 
@@ -308,8 +312,9 @@ Please use me responsible\n
         message_id = update._effective_message.message_id
         userid = update.message.from_user.id
 
-        if (userid not in self.admins) or (userid not in self.users):
+        if (userid not in self.admins) and (userid not in self.admins):
             return False
+
         custom_keyboard = []
 
         for map_name in self.server.get_map_list():
