@@ -94,7 +94,7 @@ class Server:
                         self.mother_class.update()
                         t.sleep(self.interval)
                     except Exception:
-                        sys.exit()
+                        os.system('screen -X -S fobot kill')
 
         return Update_Thread(interval, self).start()
 

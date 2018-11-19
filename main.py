@@ -6,11 +6,12 @@ Alpha 0.0.1
 
 from TelegramBot import TelegramBot
 import os
-import time
+import time as t
+import sys
 import telegram
+import threading
 
 SCREEN_NAME = str(os.environ.get('SCREEN_NAME'))
-
 
 def set_init_screen_id():
     screen_id = ""
@@ -57,23 +58,38 @@ chat_id = os.environ.get('CHAT_ID')
 SCREEN_NAME = os.environ.get('SCREEN_NAME')
 screen_id_old = set_init_screen_id()
 
-#bot = TelegramBot(token=token,chat_id=chat_id)
 try:
     bot = TelegramBot(token=token,chat_id=chat_id)
 
-except telegram.error.TimedOut:
+except telegram.error.TimedOut as TimeoutError:
+    print(TimeoutError)
     print('Telegram Timeout Error')
 
-except telegram.error.RetryAfter:
+except telegram.error.RetryAfter as RetryError:
+    print(RetryError)
     print('Telegram Retry Error')
 
-except Exception:
+except Exception as GeneralExeption:
+    print(GeneralExeption)
     os.system('screen -X -S fobot kill')
 
 
-while True:
-    time.sleep(5)
-    print('Server is running on: Screen ID: {}'.format(screen_id_old))
-    if not check_screen_id(screen_id_old):
-        os.system('screen -X -S fobot kill')
+def screen_daemon(inter):
+        class Screen_Thread(threading.Thread):
 
+            def __init__(self, interval):
+                threading.Thread.__init__(self)
+                self.interval = interval
+
+            def run(self):
+                while True:
+                    try:
+                        print('Server is running on: Screen ID: {}'.format(screen_id_old))
+                        if not check_screen_id(screen_id_old):
+                            os.system('screen -X -S fobot kill')
+                    except Exception:
+                        os.system('screen -X -S fobot kill')
+
+        return Screen_Thread(inter).start()
+
+screen_daemon(5)

@@ -98,7 +98,7 @@ def create_server_status_ticker(server):
     old_id = create.id-1
     if ServerStatus.exists(id=old_id):
         before = ServerStatus[old_id]
-        if (before.current_map.id != create.current_map.id) and (create.human > 3):
+        if (before.current_map.id != create.current_map.id) and (create.human >= 2):
             before.current_map.played = before.current_map.played + 1
 
     return create
