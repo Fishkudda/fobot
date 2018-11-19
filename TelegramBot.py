@@ -8,6 +8,7 @@ import math
 import time
 
 ADMINS = [651421362,742523989,85438832]
+USERS = []
 
 class TelegramBot:
     def __init__(self, token, chat_id,debug=False):
@@ -20,6 +21,7 @@ class TelegramBot:
         self.token = token
         self.chat_id = chat_id
         self.admins = ADMINS
+        self.users = USERS
         self.status = {}
         self.server = Server()
         self.debug = debug
@@ -91,6 +93,10 @@ Please use me responsible\n
         self.dispatcher.bot.sendMessage(self.chat_id, text=help_ms)
 
     def get_all_player(self,bot,update):
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
         players = Database.get_all_player()
         msg = ""
 
@@ -124,7 +130,7 @@ Please use me responsible\n
         message_id = update._effective_message.message_id
         userid = update.message.from_user.id
 
-        if userid not in self.admins:
+        if (userid not in self.admins) or (userid not in self.users):
             return False
         custom_keyboard = []
 
@@ -142,6 +148,10 @@ Please use me responsible\n
         pass
 
     def map_stats(self,bot,update):
+        userid = update.message.from_user.id
+
+        if (userid not in self.admins) or (userid not in self.users):
+            return False
         maps = Database.get_maps_by_played()
         msg = ""
 
@@ -156,6 +166,10 @@ Please use me responsible\n
 
 
     def db_size(self,bot,update):
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
         size = os.path.getsize('server.db')
         if size > 0:
             size = size / 1000000
@@ -171,7 +185,7 @@ Please use me responsible\n
     def request_update(self, bot, update):
         userid = update.message.from_user.id
 
-        if userid not in self.admins:
+        if (userid not in self.admins) or (userid not in self.users):
             return False
         usecase = ""
         bot = update._effective_message.reply_to_message.from_user.is_bot
@@ -214,6 +228,10 @@ Please use me responsible\n
 
 
     def just_say(self,bot,update):
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
         self.server.just_say(" ".join(update.message.text.split(' ')[1:]))
 
     def move_player(self,bot,update):
@@ -223,7 +241,7 @@ Please use me responsible\n
             username = update.message.from_user.first_name + " " + update.message.from_user.last_name
         else:
             username = update.message.from_user.first_name
-        if userid not in self.admins:
+        if (userid not in self.admins) or (userid not in self.users):
             return False
         custom_keyboard = []
 
@@ -244,7 +262,7 @@ Please use me responsible\n
             username = update.message.from_user.first_name + " " + update.message.from_user.last_name
         else:
             username = update.message.from_user.first_name
-        if userid not in self.admins:
+        if (userid not in self.admins) or (userid not in self.users):
             return False
         custom_keyboard = []
 
@@ -290,7 +308,7 @@ Please use me responsible\n
         message_id = update._effective_message.message_id
         userid = update.message.from_user.id
 
-        if userid not in self.admins:
+        if (userid not in self.admins) or (userid not in self.users):
             return False
         custom_keyboard = []
 
