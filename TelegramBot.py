@@ -2,10 +2,12 @@ from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, Callb
 import os
 from Server import Server
 import telegram
+import Database
+import re
 
 
 class TelegramBot:
-    def __init__(self, token, chat_id):
+    def __init__(self, token, chat_id,debug=False):
         self.updater = Updater(
             token=token)
         self.updater.start_polling()
@@ -17,6 +19,7 @@ class TelegramBot:
         self.admins = [651421362,742523989,85438832]
         self.status = {}
         self.server = Server()
+        self.debug=debug
 
 
         # Command Handler
@@ -34,6 +37,8 @@ class TelegramBot:
         handle_get_chat_id = CommandHandler('get_chat_id',self.get_chat_id)
         handle_get_full_log = CommandHandler('get_full_log',self.get_full_log)
         handle_db_size = CommandHandler('get_db_size',self.db_size)
+        handle_get_maps_stats = CommandHandler('maplist_stats',self.map_stats)
+        handle_get_all_players = CommandHandler('getPlayers',self.get_all_player)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
@@ -49,13 +54,16 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_map_list)
         self.dispatcher.add_handler(handle_say)
         self.dispatcher.add_handler(handle_sync)
-        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text="Fobot started")
+        if self.debug:
+            self.dispatcher.bot.sendMessage(chat_id=self.chat_id, text="Fobot_restarted,DEBUG: {}".format(self.debug))
         self.dispatcher.add_handler(handle_player_move)
         self.dispatcher.add_handler(handle_db_size)
+        self.dispatcher.add_handler(handle_get_maps_stats)
+        self.dispatcher.add_handler(handle_get_all_players)
 
     def help(self,bot,update):
         help_ms = """
-Welcome i'am the Friend's Only Bot\n
+Welcome i'am the Friend's Only Bot\n/s
 I manage {}
 \n
 Please use me responsible\n
@@ -69,13 +77,40 @@ Please use me responsible\n
 """.format(os.environ.get('SERVER_NAME'))
         self.dispatcher.bot.sendMessage(self.chat_id, text=help_ms)
 
+    def get_all_player(self,bot,update):
+        players = Database.get_all_player()
+        msg = ""
+
+        for player in players:
+            if re.match(r'^STEAM_',player.steam_id):
+                msg = msg + player.name + '\n' + player.steam_id + '\n'
+
+        print(msg)
+
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text=msg)
+
+
     def get_full_log(self):
         pass
+
+    def map_stats(self,bot,update):
+        maps = Database.get_maps_by_played()
+        msg = ""
+
+        all_times = sum([the_map.played for the_map in maps])
+        if all_times == 0:
+            all_times = 1
+
+        for the_map in maps:
+            msg = msg + the_map.name+' share: '+str(round(the_map.played/all_times*100)) +'%\n'
+
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text=msg)
+
 
     def db_size(self,bot,update):
         size = os.path.getsize('server.db')
         if size > 0:
-            size = size /1000000
+            size = size / 1000000
         msg = "Size: {}MB".format(size)
         self.dispatcher.bot.sendMessage(self.chat_id,msg)
 

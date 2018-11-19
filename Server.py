@@ -6,7 +6,6 @@ import time as t
 import sys
 import Database
 
-
 PATH_TO_SERVER = str(os.environ.get('PATH_TO_SERVER'))
 SERVER_NAME = "Friends Only Daddelstube #2"
 SCREEN_NAME = str(os.environ.get('SCREEN_NAME'))
@@ -22,6 +21,7 @@ class Server:
         self.current_map = ""
         self.players = []
         self.map_list = []
+
         walk_dir = os.walk(PATH_TO_SERVER + "/csgo/maps")
         for x, y, z in walk_dir:
             for map in z:
@@ -167,8 +167,9 @@ class Server:
 
         try:
             status_db = Database.create_server_status_ticker(self)
-            Database.print_all_server_status()
-        except Exception:
+            print(status_db)
+        except Exception as Database_Exception:
+            print(Database_Exception)
             print("Database Error cant save server_status")
 
         self.players = []
@@ -185,7 +186,7 @@ class Server:
 
 
 
-            if (re.match(r'^#[0-9]', s_text[id_f])) or ('BOT' in s_text):
+            if 'BOT' in s_text:
                 try:
                     name_start = 0
                     name_end = 0
@@ -212,17 +213,22 @@ class Server:
                 except:
                     name = 'UNKNOWN_PLAYER'
 
+                steam_id = "NO_ID_{}".format(name)
+
                 is_bot = False
                 for tab in s_text:
                     if 'BOT' in tab:
                         is_bot = True
+                    if re.match(r'^STEAM_',tab):
+                        steam_id = tab
+
 
                 player = Player(id=id, name=name, is_bot=is_bot,
-                                server=self, steam_id=s_text[i + 4],
+                                server=self, steam_id=steam_id,
                                 ip=s_text[-1])
                 self.add_player(player)
                 player_db = Database.add_player(datetime.datetime.utcnow(), name,
-                                    steam_id=s_text[i + 4])
+                                    steam_id=steam_id)
 
                 Database.create_player_status(player_db,status_db)
 
@@ -237,17 +243,25 @@ class Server:
                         i = i + 1
                 except:
                     name = 'UNKNOWN_PLAYER'
-
+                steam_id = "NO_ID_{}".format(name)
                 is_bot = False
                 for tab in s_text:
                     if 'BOT' in tab:
                         is_bot = True
+                    if re.match(r'^STEAM_',tab):
+                        steam_id = tab
+
                 name = name.strip('"')
 
+                steam_id = ""
+
+
+
                 player = Player(id=id, name=name, is_bot=is_bot,
-                                server=self, steam_id=s_text[i + 4],
+                                server=self, steam_id=steam_id,
                                 ip=s_text[-1])
-                Database.add_player(datetime.datetime.utcnow(),name,steam_id=s_text[i+4])
+                player_db = Database.add_player(datetime.datetime.utcnow(),name,steam_id=steam_id)
+                Database.create_player_status(player_db, status_db)
                 self.add_player(player)
 
 

@@ -73,10 +73,17 @@ db.generate_mapping(create_tables=True)
 set_sql_debug(False)
 
 @db_session
+def get_all_player():
+    return Player.select()[0:]
+
+@db_session
+def get_maps_by_played():
+    return Maps.select().order_by(desc(Maps.played))[0:]
+
+
+@db_session
 def create_player_status(player,status):
     return PlayerStatus(player=player,status=status)
-
-
 
 @db_session
 def add_player(first_saw, name, steam_id):
@@ -171,7 +178,4 @@ def print_all_maps():
     for x in get_all_maps():
         msg = "{} {} {}".format(x.name, x.played, x.value)
         print(msg)
-
-#print_all_server_status()
-
 
