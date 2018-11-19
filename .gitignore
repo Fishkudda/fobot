@@ -3,4 +3,4 @@ start_debug.sh
 venv
 __pycache__
 .idea
-.idea/*
+/.idea

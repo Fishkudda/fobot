@@ -7,6 +7,8 @@ import re
 import math
 import time
 
+ADMINS = [651421362,742523989,85438832]
+
 class TelegramBot:
     def __init__(self, token, chat_id,debug=False):
         self.updater = Updater(
@@ -17,7 +19,7 @@ class TelegramBot:
         self.username = self.updater.bot.username
         self.token = token
         self.chat_id = chat_id
-        self.admins = [651421362,742523989,85438832]
+        self.admins = ADMINS
         self.status = {}
         self.server = Server()
         self.debug = debug
