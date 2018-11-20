@@ -89,7 +89,7 @@ class TelegramBot:
             return False
         time_up = Database.get_total_minutes_up()
         print(time_up)
-        self.dispatcher.bot.sendMessage(self.chat_id,"FOBOT TIME TRACKED FOR {} min".format(time_up))
+        self.dispatcher.bot.sendMessage(self.chat_id, "FOBOT TIME TRACKED FOR {} min".format(time_up))
 
     def set_vip(self,bot,update):
         message_id = update._effective_message.message_id
@@ -107,6 +107,7 @@ class TelegramBot:
         reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
                                                     selective=True,
                                                     one_time_keyboard=True)
+
         self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
                                         reply_markup=reply_markup,
                                         reply_to_message_id=message_id,
@@ -139,6 +140,7 @@ Welcome i'am the Friend's Only Bot\n/s
 I manage {}
 \n
 Please use me responsible\n
+/bot - Bot Menu
 /status - see server status\n
 /maplist - change/see maps\n
 /move - move player(hermy) to spectators\n
@@ -146,6 +148,10 @@ Please use me responsible\n
 /ban - ban a player\n  
 /get_chat_id - get the chat id\n
 /get_id - get your id\n   
+/set_vip - set player vip\n
+/unset_vip - unset vip\n
+/total_up - time total tracked\n
+
 """.format(os.environ.get('SERVER_NAME'))
         self.dispatcher.bot.sendMessage(self.chat_id, text=help_ms)
 
@@ -161,14 +167,14 @@ Please use me responsible\n
         msg = ""
 
         for player in players:
-            if re.match(r'^STEAM_',player.steam_id) or True:
+            if re.match(r'^STEAM_',player.steam_id):
                 try:
                     minutes_played = Database.get_minutes_played(player.id)
                     print(minutes_played)
                 except Exception as db_Exception:
                     minutes_played = "Cant get Time for Player"
                     print(db_Exception)
-                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min'.format(str(round(minutes_played)))+'\n'
+                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min'.format(str(round(minutes_played)))+'Share: {}%'.format(round(Database.time_weight_player(player.id)))+'\n'
 
         partial = math.ceil(len(msg)/2000)
 
@@ -180,7 +186,7 @@ Please use me responsible\n
             for player_list in chunked:
                 chunked_msg = ""
                 for player in player_list:
-                    if re.match(r'^STEAM_', player.steam_id) or True:
+                    if re.match(r'^STEAM_', player.steam_id):
                         minutes_played = Database.get_minutes_played(player.id)
                         print(minutes_played)
                         chunked_msg = chunked_msg + player.name + '\n' + player.steam_id +' Time:{}min'.format(str(round(minutes_played)))+ '\n'

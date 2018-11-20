@@ -135,6 +135,42 @@ def get_total_minutes_up():
 
 
 @db_session
+def get_minutes_players_tracked():
+    res = select(status for status in ServerStatus if status.human >= 2)
+    return (len(res*30))/60
+
+
+@db_session
+def time_weight_player(player):
+
+    player_tracked = get_minutes_players_tracked()
+
+    if player_tracked == 0:
+        return 0
+
+    if type(player) == str:
+        if re.match(r'^STEAM_', player):
+            p = Player.get(steam_id=player)
+            p_t = get_minutes_played(p)
+
+            return (p_t/player_tracked)*100
+        else:
+            p = Player.get(name=player)
+            p_t = get_minutes_played(p)
+
+            return (p_t / player_tracked) * 100
+
+    elif type(player) == int:
+        p = Player.get(id=player)
+        p_t = get_minutes_played(p)
+        return (p_t / player_tracked) * 100
+
+    elif type(player) == Player:
+        p_t = get_minutes_played(Player)
+        return (p_t / player_tracked) * 100
+
+
+@db_session
 def get_minutes_played(player,time_start=datetime.utcnow()-timedelta(days=30),time_end=datetime.utcnow()):
 
     if type(player) == int:
@@ -169,10 +205,10 @@ def get_minutes_played(player,time_start=datetime.utcnow()-timedelta(days=30),ti
         return -9999
 
 
-
 @db_session
 def get_all_player():
     return Player.select()[0:]
+
 
 @db_session
 def get_maps_by_played():
