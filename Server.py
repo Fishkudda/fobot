@@ -197,9 +197,15 @@ class Server:
                     name = " ".join(s_text[name_start:name_end]).strip('"')
                 except:
                     name = 'UNKNOWN_PLAYER_BOT'
+
                 is_bot = True
                 player = Player(id=id, name=name, is_bot=is_bot,
                                 server=self)
+
+                steam_id = "NO_STEAM_ID_FOR_BOT_{}".format(name)
+
+                Database.create_player_status(datetime.datetime.utcnow(),name,steam_id)
+
                 self.add_player(player)
             elif re.match(r"^#[0-9]", s_text[0]):
                 i = 0
@@ -226,10 +232,9 @@ class Server:
                                 server=self, steam_id=steam_id,
                                 ip=s_text[-1])
                 self.add_player(player)
-                player_db = Database.add_player(datetime.datetime.utcnow(), name,
-                                    steam_id=steam_id)
 
-                Database.create_player_status(player_db,status_db)
+                Database.create_player_status(datetime.datetime.utcnow(), name,
+                                              steam_id)
 
 
             elif (s_text[0] == '#' and re.match(r'^[0-9]',s_text[2])):
@@ -252,15 +257,13 @@ class Server:
 
                 name = name.strip('"')
 
-                steam_id = ""
-
-
-
                 player = Player(id=id, name=name, is_bot=is_bot,
                                 server=self, steam_id=steam_id,
                                 ip=s_text[-1])
-                player_db = Database.add_player(datetime.datetime.utcnow(),name,steam_id=steam_id)
-                Database.create_player_status(player_db, status_db)
+
+                Database.create_player_status(datetime.datetime.utcnow(), name,
+                                              steam_id)
+
                 self.add_player(player)
 
 

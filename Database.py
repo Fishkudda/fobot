@@ -24,11 +24,12 @@ class Player(db.Entity):
     voted = Required(int, sql_default=True, default=0)
     votes = Set('Votes')
     player_status = Set('PlayerStatus')
+    multi = Required(int,sql_default=True,default=1)
 
 
 class PlayerStatus(db.Entity):
     id = PrimaryKey(int, auto=True)
-    status = Required('ServerStatus')
+    time = Required(datetime,sql_default=True,default=datetime.utcnow())
     player = Required('Player')
 
 
@@ -65,12 +66,13 @@ class ServerStatus(db.Entity):
     bots = Required(int)
     human = Required(int)
     current_map = Required('Maps')
-    player_status = Set('PlayerStatus')
+
 
 
 db.bind(provider="sqlite", filename='server.db', create_db=True)
 db.generate_mapping(create_tables=True)
 set_sql_debug(False)
+
 
 @db_session
 def get_all_player():
@@ -82,8 +84,15 @@ def get_maps_by_played():
 
 
 @db_session
-def create_player_status(player,status):
-    return PlayerStatus(player=player,status=status)
+def create_player_status(first_saw,name,steam_id):
+    if Player.exists(steam_id=steam_id):
+        player = Player.get(steam_id=steam_id)
+        print("Player: {} with steam ID {} already exists".format(player.name,
+                                                                  player.steam_id))
+    else:
+        player = Player(first_saw=first_saw, name=name, steam_id=steam_id)
+
+    return PlayerStatus(player=player)
 
 @db_session
 def add_player(first_saw, name, steam_id):
