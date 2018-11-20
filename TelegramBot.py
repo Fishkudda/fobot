@@ -6,6 +6,7 @@ import Database
 import re
 import math
 import time
+import collections
 
 ADMINS = [651421362,742523989,85438832]
 USERS = [651421362,742523989,85438832]
@@ -53,6 +54,9 @@ class TelegramBot:
         handle_get_maps_stats = CommandHandler('maplist_stats',self.map_stats)
         handle_get_all_players = CommandHandler('getPlayers',self.get_all_player)
         handle_bot = CommandHandler('bot',self.bot_menu)
+        handle_set_vip = CommandHandler('set_vip',self.set_vip)
+        handle_unset_vip = CommandHandler('unset_vip',self.unset_vip)
+        handle_total_up = CommandHandler('total_up',self.total_up)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
@@ -75,6 +79,59 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_get_maps_stats)
         self.dispatcher.add_handler(handle_get_all_players)
         self.dispatcher.add_handler(handle_bot)
+        self.dispatcher.add_handler(handle_set_vip)
+        self.dispatcher.add_handler(handle_unset_vip)
+        self.dispatcher.add_handler(handle_total_up)
+
+    def total_up(self,bot,update):
+        userid = update.message.from_user.id
+        if userid not in self.admins:
+            return False
+        time_up = Database.get_total_minutes_up()
+        print(time_up)
+        self.dispatcher.bot.sendMessage(self.chat_id,"FOBOT TIME TRACKED FOR {} min".format(time_up))
+
+    def set_vip(self,bot,update):
+        message_id = update._effective_message.message_id
+        if update.message.from_user.last_name:
+            username = update.message.from_user.first_name + " " + update.message.from_user.last_name
+        else:
+            username = update.message.from_user.first_name
+        userid = update.message.from_user.id
+        if userid not in self.admins:
+            return False
+        custom_keyboard = []
+
+        for player in self.server.get_players():
+            custom_keyboard.append([player.name])
+        reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
+                                                    selective=True,
+                                                    one_time_keyboard=True)
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
+                                        reply_markup=reply_markup,
+                                        reply_to_message_id=message_id,
+                                        text="Set Vip".format(username))
+
+    def unset_vip(self,bot,update):
+        message_id = update._effective_message.message_id
+        if update.message.from_user.last_name:
+            username = update.message.from_user.first_name + " " + update.message.from_user.last_name
+        else:
+            username = update.message.from_user.first_name
+        userid = update.message.from_user.id
+        if userid not in self.admins:
+            return False
+        custom_keyboard = []
+
+        for player in self.server.get_players():
+            custom_keyboard.append([player.name])
+        reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
+                                                    selective=True,
+                                                    one_time_keyboard=True)
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
+                                        reply_markup=reply_markup,
+                                        reply_to_message_id=message_id,
+                                        text="Unset Vip".format(username))
 
     def help(self,bot,update):
         help_ms = """
@@ -99,11 +156,19 @@ Please use me responsible\n
             return False
 
         players = Database.get_all_player()
+        players = sorted(players, key=lambda time: Database.get_minutes_played(time),reverse=True)
+
         msg = ""
 
         for player in players:
-            if re.match(r'^STEAM_',player.steam_id):
-                msg = msg + player.name + '\n' + player.steam_id + '\n'
+            if re.match(r'^STEAM_',player.steam_id) or True:
+                try:
+                    minutes_played = Database.get_minutes_played(player.id)
+                    print(minutes_played)
+                except Exception as db_Exception:
+                    minutes_played = "Cant get Time for Player"
+                    print(db_Exception)
+                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min'.format(str(round(minutes_played)))+'\n'
 
         partial = math.ceil(len(msg)/2000)
 
@@ -115,8 +180,10 @@ Please use me responsible\n
             for player_list in chunked:
                 chunked_msg = ""
                 for player in player_list:
-                    if re.match(r'^STEAM_', player.steam_id):
-                        chunked_msg = chunked_msg + player.name + '\n' + player.steam_id + '\n'
+                    if re.match(r'^STEAM_', player.steam_id) or True:
+                        minutes_played = Database.get_minutes_played(player.id)
+                        print(minutes_played)
+                        chunked_msg = chunked_msg + player.name + '\n' + player.steam_id +' Time:{}min'.format(str(round(minutes_played)))+ '\n'
                 part_msg.append(chunked_msg)
 
         else:
@@ -227,6 +294,17 @@ Please use me responsible\n
                 self.map_stats(bot=bot,update=update)
             if update.message.text == "Players":
                 self.get_all_player(bot=bot, update=update)
+
+        if usecase == 'Set Vip':
+            res = Database.set_vip(update.message.text)
+            print(res.vip)
+
+        if usecase == 'Unset Vip':
+            res = Database.unset_vip(update.message.text)
+            print(res.vip)
+
+
+
 
 
     def just_say(self,bot,update):

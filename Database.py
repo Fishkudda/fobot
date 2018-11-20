@@ -1,5 +1,6 @@
 from pony.orm import *
-from datetime import datetime
+from datetime import datetime,timedelta
+import re
 
 db = Database()
 
@@ -25,6 +26,7 @@ class Player(db.Entity):
     votes = Set('Votes')
     player_status = Set('PlayerStatus')
     multi = Required(int,sql_default=True,default=1)
+    vip = Required(bool,sql_default=True,default=False)
 
 
 class PlayerStatus(db.Entity):
@@ -68,10 +70,104 @@ class ServerStatus(db.Entity):
     current_map = Required('Maps')
 
 
-
 db.bind(provider="sqlite", filename='server.db', create_db=True)
 db.generate_mapping(create_tables=True)
 set_sql_debug(False)
+
+
+@db_session
+def set_vip(player):
+    if type(player) == str:
+        if re.match(r'^STEAM_',player):
+            player_steam_id = player
+            p = Player.get(steam_id= player_steam_id)
+            p.vip = True
+            return p
+        else:
+            player_name = player
+            p = Player.get(name=player_name)
+            p.vip = True
+            return p
+
+    elif type(player) == int:
+        player_id = player
+        p = Player.get(id=player_id)
+        p.vip = True
+        return p
+
+    elif type(player) == Player:
+        player_db = player
+        player_db.vip = True
+        return player_db
+
+
+@db_session
+def unset_vip(player):
+    if type(player) == str:
+        if re.match(r'^STEAM_', player):
+            player_steam_id = player
+            p = Player.get(steam_id=player_steam_id)
+            p.vip = False
+            return p
+        else:
+            player_name = player
+
+            p = Player.get(name=player_name)
+            p.vip = False
+            return p
+
+    elif type(player) == int:
+        player_id = player
+        p = Player.get(id=player_id)
+        p.vip = False
+        return p
+
+    elif type(player) == Player:
+        player_db = player
+        player_db.vip = False
+        return player_db
+
+
+@db_session
+def get_total_minutes_up():
+    res = select(status for status in ServerStatus)
+    return (len(res)*30)/60
+
+
+@db_session
+def get_minutes_played(player,time_start=datetime.utcnow()-timedelta(days=30),time_end=datetime.utcnow()):
+
+    if type(player) == int:
+        player_index = player
+        res = select(status for status in PlayerStatus if (player_index == status.player.id) and (status.time < time_end) and (status.time > time_start))
+
+        if len(res) == 0:
+            return 0
+        return (len(res) * 30) / 60
+    elif type(player) == str:
+        if re.match(r'^STEAM_', player):
+            player_steam_id = player
+            res = select(status for status in PlayerStatus if (player_steam_id == status.player.steam_id) and (status.time < time_end) and (status.time > time_start))
+            if len(res) == 0:
+                return 0
+            return (len(res) * 30) / 60
+        else:
+            player_name = player
+            res = select(status for status in PlayerStatus if (player_name == status.player.name) and (status.time < time_end) and (status.time > time_start))
+            if len(res) == 0:
+                return 0
+            return (len(res)*30)/60
+
+    elif type(player) == Player:
+        player_db = player
+        res = select(status for status in PlayerStatus if (player_db == status.player) and (status.time < time_end) and (status.time > time_start))
+        if len(res) == 0:
+            return 0
+        return (len(res)*30)/60
+
+    else:
+        return -9999
+
 
 
 @db_session
