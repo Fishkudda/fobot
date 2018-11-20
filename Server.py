@@ -20,6 +20,7 @@ class Server:
         self.current_map = ""
         self.players = []
         self.map_list = []
+        self.cap_time = None
 
         walk_dir = os.walk(PATH_TO_SERVER + "/csgo/maps")
         for x, y, z in walk_dir:
@@ -36,6 +37,7 @@ class Server:
 
         # Set Timer to Update
         self.update_daemon = self.update_daemon(20)
+        #self.user_input_daemon = self.user_input_daemon(5)
 
     def __repr__(self):
         return "Server:{} on {} map: {} player: {} bots: {}".format(self.name,
@@ -97,6 +99,84 @@ class Server:
 
         return Update_Thread(interval, self).start()
 
+    def user_input_daemon(self,interval):
+        class UserInputThread(threading.Thread):
+
+            def __init__(self, interval, mother_class):
+                threading.Thread.__init__(self)
+                self.interval = interval
+                self.mother_class = mother_class
+
+            def run(self):
+                is_alive = False
+                while True:
+                    try:
+                        self.mother_class.user_input_update()
+                        t.sleep(self.interval)
+                    except Exception as Exception_user_input:
+                        print(Exception_user_input)
+                        os.system('screen -X -S fobot kill')
+
+        return UserInputThread(interval, self).start()
+
+
+    def user_input_update(self):
+        os.system('screen -ls > /tmp/screenoutput')
+        with open('/tmp/screenoutput', 'r') as file:
+            result = file.readlines()
+
+        self.screen_id = ""
+
+        if (result[0] == 'There is a screen on:\r\n') or (
+                result[0] == 'There are screens on:\n') or (
+                result[0] == 'There is a screen on:\n'):
+
+            for index, line in enumerate(result):
+                if SCREEN_NAME in line:
+                    split_res = result[index].split('.')[0]
+                    screen_id = split_res.strip('\t')
+                    self.screen_id = screen_id
+
+        if self.screen_id == "":
+            return False
+
+        cap_time = str(datetime.datetime.utcnow())+'\n'
+        sys_var = "screen -S {} -X stuff '{}\r'".format(screen_id, cap_time)
+        if not self.cap_time:
+            self.cap_time = cap_time
+
+
+        os.system(sys_var)
+        t.sleep(1)
+        path_to_screenlog = PATH_TO_SERVER + "/screenlog.0"
+
+        output = []
+        ret_counter = 20
+
+        while (self.cap_time not in output) and (ret_counter >= 0):
+            t.sleep(3)
+            ret_counter = ret_counter - 1
+            with open(path_to_screenlog, 'r') as file:
+                output = file.readlines()
+
+        if self.cap_time not in output:
+            return False
+
+        output.reverse()
+        end_index = None
+
+        for index,line in enumerate(output):
+            if line == self.cap_time:
+                print(index)
+                end_index = index
+        if end_index:
+            data_input = output[0:end_index]
+            print(data_input)
+
+        self.cap_time = cap_time
+
+
+
     def update(self):
         os.system('screen -ls > /tmp/screenoutput')
         with open('/tmp/screenoutput', 'r') as file:
@@ -126,6 +206,7 @@ class Server:
         with open(path_to_screenlog, 'r') as file:
             output = file.readlines()
         output.reverse()
+
         i = 0
         i_end = 0
 

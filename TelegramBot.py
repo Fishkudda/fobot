@@ -228,7 +228,7 @@ Please use me responsible\n
             return False
 
         maps = Database.get_maps_by_played()
-        msg = ""
+        msg = "---Map List----"
 
         all_times = sum([the_map.played for the_map in maps])
         if all_times == 0:
@@ -309,10 +309,6 @@ Please use me responsible\n
             res = Database.unset_vip(update.message.text)
             print(res.vip)
 
-
-
-
-
     def just_say(self,bot,update):
         userid = update.message.from_user.id
 
@@ -387,10 +383,13 @@ Please use me responsible\n
 
     def server_status(self,bot,update):
         msg = "-----Server Status-----\n"
-        msg = msg + "{}\n".format(self.server)
+        msg = msg + "map: {}\n".format(self.server.current_map)
+        msg = msg + "players {}\n".format(self.server.get_number_of_players())
+        msg = msg + "bots:{}\n".format(self.server.get_number_of_bots())
+        msg = msg + '\n'
         for player in self.server.get_players():
-            msg = msg + "{}\n".format("#"+player.id+" "+player.name)
-        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text=msg)
+            msg = msg + "{}\n".format(player.name)
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id, text=msg)
 
     def map_list(self,bot,update):
         message_id = update._effective_message.message_id
