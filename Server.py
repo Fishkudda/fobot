@@ -21,7 +21,7 @@ class Server:
         self.players = []
         self.map_list = []
         self.cap_time = None
-        self.telegran_bot = telegram_bot
+        self.telegram_bot = telegram_bot
 
         walk_dir = os.walk(PATH_TO_SERVER + "/csgo/maps")
         for x, y, z in walk_dir:
@@ -115,7 +115,6 @@ class Server:
                         #t.sleep(self.interval)
                     except Exception as Exception_user_input:
                         print(Exception_user_input)
-                        os.system('screen -X -S fobot kill')
 
         return UserInputThread(interval, self).start()
 
@@ -183,18 +182,27 @@ class Server:
 
         self.cap_time = cap_time
 
+        player_names = [player.name+':' for player in Database.get_all_player()]
+        compile_regx = re.compile('|'.join(player_names)+':')
 
-        if data_input and self.telegran_bot.talk:
+        print(compile_regx)
+
+
+        if data_input and self.telegram_bot.talk:
             msg = ""
             data_input.reverse()
             for line in data_input:
                 if re.match(r'Console:',line):
                     msg = msg + "{}\n".format(line)
+                if re.match(compile_regx,line):
+                    msg = msg + "{}\n".format(line)
+
+
 
             print(msg)
 
             if msg != "":
-                self.telegran_bot.dispatcher.bot.sendMessage(self.telegran_bot.chat_id,text=msg)
+                self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id,text=msg)
 
     def update(self):
         os.system('screen -ls > /tmp/screenoutput')
