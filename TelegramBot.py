@@ -24,7 +24,7 @@ class TelegramBot:
         self.admins = ADMINS
         self.users = USERS
         self.status = {}
-        self.server = Server()
+        self.server = Server(telegram_bot=self)
         self.debug = debug
         self.menu_reg = ['Status',
                          'Maplist',
@@ -34,6 +34,7 @@ class TelegramBot:
                          'DB Size',
                          'Map Stats',
                          'Players']
+        self.talk = False
 
 
         # Command Handler
@@ -57,6 +58,7 @@ class TelegramBot:
         handle_set_vip = CommandHandler('set_vip',self.set_vip)
         handle_unset_vip = CommandHandler('unset_vip',self.unset_vip)
         handle_total_up = CommandHandler('total_up',self.total_up)
+        handle_talk = CommandHandler('talk',self.toogle_talk)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
@@ -82,6 +84,24 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_set_vip)
         self.dispatcher.add_handler(handle_unset_vip)
         self.dispatcher.add_handler(handle_total_up)
+        self.dispatcher.add_handler(handle_talk)
+
+    def toogle_talk(self,bot,update):
+        message_id = update._effective_message.message_id
+        userid = update.message.from_user.id
+
+        if (userid not in self.admins) and (userid not in self.admins):
+            return False
+        custom_keyboard = [['Activate'],['Deactivate']]
+
+        reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
+                                                    selective=True,
+                                                    one_time_keyboard=True)
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
+                                        reply_markup=reply_markup,
+                                        text="Toogle Talk",
+                                        reply_to_message_id=message_id)
+
 
     def total_up(self,bot,update):
         userid = update.message.from_user.id
@@ -308,6 +328,12 @@ Please use me responsible\n
         if usecase == 'Unset Vip':
             res = Database.unset_vip(update.message.text)
             print(res.vip)
+
+        if usecase == 'Toogle Talk':
+            if update.message.text == 'Activate':
+                self.talk = True
+            elif update.message.text == 'Deactivate':
+                self.talk = False
 
     def just_say(self,bot,update):
         userid = update.message.from_user.id

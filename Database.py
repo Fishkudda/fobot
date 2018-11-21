@@ -138,7 +138,7 @@ def get_total_minutes_up():
 @db_session
 def get_minutes_players_tracked():
     res = select(status for status in ServerStatus if status.human >= 2)
-    return (len(res*30))/60
+    return (len(res)*30)/60
 
 
 @db_session

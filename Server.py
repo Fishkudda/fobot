@@ -11,7 +11,7 @@ SCREEN_NAME = str(os.environ.get('SCREEN_NAME'))
 
 
 class Server:
-    def __init__(self):
+    def __init__(self,telegram_bot):
         self.update_counter = 0
         self.screen_id = ""
         self.ip = ""
@@ -21,6 +21,7 @@ class Server:
         self.players = []
         self.map_list = []
         self.cap_time = None
+        self.telegran_bot = telegram_bot
 
         walk_dir = os.walk(PATH_TO_SERVER + "/csgo/maps")
         for x, y, z in walk_dir:
@@ -37,7 +38,7 @@ class Server:
 
         # Set Timer to Update
         self.update_daemon = self.update_daemon(20)
-        #self.user_input_daemon = self.user_input_daemon(5)
+        self.user_input_daemon = self.user_input_daemon(5)
 
     def __repr__(self):
         return "Server:{} on {} map: {} player: {} bots: {}".format(self.name,
@@ -108,11 +109,10 @@ class Server:
                 self.mother_class = mother_class
 
             def run(self):
-                is_alive = False
                 while True:
                     try:
                         self.mother_class.user_input_update()
-                        t.sleep(self.interval)
+                        #t.sleep(self.interval)
                     except Exception as Exception_user_input:
                         print(Exception_user_input)
                         os.system('screen -X -S fobot kill')
@@ -147,35 +147,54 @@ class Server:
 
 
         os.system(sys_var)
-        t.sleep(1)
         path_to_screenlog = PATH_TO_SERVER + "/screenlog.0"
 
         output = []
-        ret_counter = 20
+        ret_counter = 4
 
-        while (self.cap_time not in output) and (ret_counter >= 0):
-            t.sleep(3)
-            ret_counter = ret_counter - 1
-            with open(path_to_screenlog, 'r') as file:
-                output = file.readlines()
+        while (self.cap_time not in output) and (cap_time not in output) and (ret_counter >= 0):
+            try:
+                t.sleep(7)
+                ret_counter = ret_counter - 1
+                print(ret_counter)
+                with open(path_to_screenlog, 'r') as file:
+                    output = file.readlines()
+            except Exception as Exception_get_log:
+                print(Exception_get_log)
+                ret_counter = ret_counter -1
 
-        if self.cap_time not in output:
+        if (self.cap_time not in output) or (cap_time not in output):
             return False
 
         output.reverse()
         end_index = None
+        start_index = None
+        data_input = None
 
         for index,line in enumerate(output):
             if line == self.cap_time:
                 print(index)
                 end_index = index
-        if end_index:
-            data_input = output[0:end_index]
-            print(data_input)
+            elif line == cap_time:
+                start_index = index
+
+        if end_index and start_index:
+            data_input = output[start_index:end_index]
 
         self.cap_time = cap_time
 
 
+        if data_input and self.telegran_bot.talk:
+            msg = ""
+            data_input.reverse()
+            for line in data_input:
+                if re.match(r'Console:',line):
+                    msg = msg + "{}\n".format(line)
+
+            print(msg)
+
+            if msg != "":
+                self.telegran_bot.dispatcher.bot.sendMessage(self.telegran_bot.chat_id,text=msg)
 
     def update(self):
         os.system('screen -ls > /tmp/screenoutput')
@@ -320,7 +339,7 @@ class Server:
 
             elif (s_text[0] == '#' and re.match(r'^[0-9]',s_text[2])):
                 i = 0
-                id = s_text[2].strip('#')
+                id = s_text[1].strip('#')
                 try:
                     name = s_text[3]
                     while name[-1] != '"':
