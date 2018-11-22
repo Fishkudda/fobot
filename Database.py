@@ -220,8 +220,6 @@ def get_maps_by_played():
 def create_player_status(first_saw,name,steam_id):
     if Player.exists(steam_id=steam_id):
         player = Player.get(steam_id=steam_id)
-        print("Player: {} with steam ID {} already exists".format(player.name,
-                                                                  player.steam_id))
     else:
         player = Player(first_saw=first_saw, name=name, steam_id=steam_id)
 
@@ -233,8 +231,7 @@ def add_player(first_saw, name, steam_id):
         player = Player.get(steam_id=steam_id)
         if name != player.name:
             player.name = name
-        print("Player: {} with steam ID {} already exists".format(player.name,
-                                                                  player.steam_id))
+
         return player
     return Player(first_saw=first_saw, name=name, steam_id=steam_id)
 

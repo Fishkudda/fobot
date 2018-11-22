@@ -95,8 +95,8 @@ class Server:
                     try:
                         self.mother_class.update()
                         t.sleep(self.interval)
-                    except Exception:
-                        os.system('screen -X -S fobot kill')
+                    except Exception as Exception_update:
+                        print(Exception_update)
 
         return Update_Thread(interval, self).start()
 
@@ -160,7 +160,7 @@ class Server:
                     output = file.readlines()
             except Exception as Exception_get_log:
                 print(Exception_get_log)
-                ret_counter = ret_counter -1
+                ret_counter = ret_counter - 1
 
         if (self.cap_time not in output) or (cap_time not in output):
             return False
@@ -172,37 +172,41 @@ class Server:
 
         for index,line in enumerate(output):
             if line == self.cap_time:
-                print(index)
                 end_index = index
             elif line == cap_time:
                 start_index = index
 
+            if end_index and start_index:
+                break
+
         if end_index and start_index:
             data_input = output[start_index:end_index]
 
+        if not data_input:
+            return False
+
         self.cap_time = cap_time
 
-        player_names = [player.name+':' for player in Database.get_all_player()]
+
+        player_names = [player.name+':' for player in self.get_players()]
         compile_regx = re.compile('|'.join(player_names)+':')
-
-        print(compile_regx)
-
 
         if data_input and self.telegram_bot.talk:
             msg = ""
             data_input.reverse()
             for line in data_input:
-                if re.match(r'Console:',line):
+                if re.match(r'Console:', line):
                     msg = msg + "{}\n".format(line)
-                if re.match(compile_regx,line):
+                if re.match(compile_regx, line):
                     msg = msg + "{}\n".format(line)
+                if line.split(':')[-1].strip() == '!up':
+                    print('MAP UP')
+                if line.split(':')[-1].strip() == '!down':
+                    print('MAP DOWN')
 
-
-
-            print(msg)
 
             if msg != "":
-                self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id,text=msg)
+                self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id, text=msg)
 
     def update(self):
         os.system('screen -ls > /tmp/screenoutput')

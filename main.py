@@ -66,20 +66,15 @@ try:
 except telegram.error.TimedOut as TimeoutError:
     print(TimeoutError)
     print('Telegram Timeout Error')
-    if bot and DEBUG:
-         bot.dispatcher.bot.sendMessage(chat_id=chat_id,text=str(TimeoutError))
 
 except telegram.error.RetryAfter as RetryError:
     print(RetryError)
     print('Telegram Retry Error')
-    if bot and DEBUG:
-          bot.dispatcher.bot.sendMessage(chat_id=chat_id,text=str(RetryError))
 
 except Exception as GeneralExeption:
     print(GeneralExeption)
-    if bot and DEBUG:
-           bot.dispatcher.bot.sendMessage(chat_id=chat_id,text=str(GeneralExeption))
-    os.system('screen -X -S fobot kill')
+
+
 
 
 def screen_daemon(inter):

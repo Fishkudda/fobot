@@ -6,7 +6,6 @@ import Database
 import re
 import math
 import time
-import collections
 
 ADMINS = [651421362,742523989,85438832]
 USERS = [651421362,742523989,85438832]
@@ -194,7 +193,7 @@ Please use me responsible\n
                 except Exception as db_Exception:
                     minutes_played = "Cant get Time for Player"
                     print(db_Exception)
-                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min'.format(str(round(minutes_played)))+'Share: {}%'.format(round(Database.time_weight_player(player.id)))+'\n'
+                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min\n'.format(str(round(minutes_played)))+'Share: {}%\n'.format(round(Database.time_weight_player(player.id)))+'\n'
 
         partial = math.ceil(len(msg)/2000)
 
@@ -248,7 +247,7 @@ Please use me responsible\n
             return False
 
         maps = Database.get_maps_by_played()
-        msg = "---Map List----"
+        msg = "---Map List----\n"
 
         all_times = sum([the_map.played for the_map in maps])
         if all_times == 0:
