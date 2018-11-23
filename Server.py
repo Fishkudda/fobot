@@ -155,7 +155,6 @@ class Server:
             try:
                 t.sleep(7)
                 ret_counter = ret_counter - 1
-                print(ret_counter)
                 with open(path_to_screenlog, 'r') as file:
                     output = file.readlines()
             except Exception as Exception_get_log:
@@ -187,25 +186,50 @@ class Server:
 
         self.cap_time = cap_time
 
+        player_list = Database.get_all_player()
 
-        player_names = [player.name+':' for player in self.get_players()]
-        compile_regx = re.compile('|'.join(player_names)+':')
+        player_dic = {player.name: player for player in player_list}
 
-        if data_input and self.telegram_bot.talk:
+        player_names = [player.name+':' for player in player_list]
+        j_names = r'|'.join(player_names)
+        compile_regx = re.compile(j_names)
+
+        if data_input:
             msg = ""
             data_input.reverse()
+
             for line in data_input:
-                if re.match(r'Console:', line):
+                if re.search(compile_regx, line) or re.match(r'Console:', line):
                     msg = msg + "{}\n".format(line)
-                if re.match(compile_regx, line):
-                    msg = msg + "{}\n".format(line)
-                if line.split(':')[-1].strip() == '!up':
-                    print('MAP UP')
-                if line.split(':')[-1].strip() == '!down':
-                    print('MAP DOWN')
+                    if line.split(':')[-1].strip() == '!like':
+                        name = line.split(':')[0].strip()
+                        if '*DEAD*' in name:
+                            name = "".join(name.split('*')[3:]).strip()
+                        voted_msg = Database.create_votes(name, self.current_map, True)
+                        self.just_say(voted_msg)
+                    if line.split(':')[-1].strip() == '!dislike':
+                        name = line.split(':')[0].strip()
+                        if '*DEAD*' in name:
+                            name = "".join(name.split('*')[3:]).strip()
+                        voted_msg = Database.create_votes(name,self.current_map, False)
+                        self.just_say(voted_msg)
 
+                    index = 0
+                    name = line.split(':')[index].strip()
 
-            if msg != "":
+                    if '*DEAD*' in name:
+                        index = 3
+                        name = "".join(name.split('*')[index:]).strip()
+                    print(name)
+
+                    if (name in player_dic.keys()) or (name == "Console"):
+                        first_w = line.split(':')[index+1].split(' ')[1]
+                        if '!ticket' == first_w:
+                            self.telegram_bot.dispatcher.bot.sendMessage(
+                                self.telegram_bot.chat_id, text="{} TICKET  FROM: {}\nTEXT: {}".format(datetime.datetime.utcnow().strftime('%c'),name,line))
+                            self.just_say("Your Ticket {} was send.".format(name))
+
+            if msg != "" and self.telegram_bot.talk:
                 self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id, text=msg)
 
     def update(self):
@@ -278,7 +302,6 @@ class Server:
 
         try:
             status_db = Database.create_server_status_ticker(self)
-            print(status_db)
         except Exception as Database_Exception:
             print(Database_Exception)
             print("Database Error cant save server_status")

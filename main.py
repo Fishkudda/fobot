@@ -62,17 +62,10 @@ screen_id_old = set_init_screen_id()
 
 try:
     bot = TelegramBot(token=token,chat_id=chat_id,debug=DEBUG)
-
-except telegram.error.TimedOut as TimeoutError:
-    print(TimeoutError)
-    print('Telegram Timeout Error')
-
-except telegram.error.RetryAfter as RetryError:
-    print(RetryError)
-    print('Telegram Retry Error')
-
 except Exception as GeneralExeption:
     print(GeneralExeption)
+    os.system('screen -X -S fobot kill')
+
 
 
 

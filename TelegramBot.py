@@ -58,9 +58,11 @@ class TelegramBot:
         handle_unset_vip = CommandHandler('unset_vip',self.unset_vip)
         handle_total_up = CommandHandler('total_up',self.total_up)
         handle_talk = CommandHandler('talk',self.toogle_talk)
+        handle_introduce = CommandHandler('introduce',self.introduce_yourself)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
+
         self.dispatcher.add_handler(handle_send_id)
         self.dispatcher.add_handler(handle_get_chat_id)
         self.dispatcher.add_handler(message_handler)
@@ -84,6 +86,25 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_unset_vip)
         self.dispatcher.add_handler(handle_total_up)
         self.dispatcher.add_handler(handle_talk)
+        self.dispatcher.add_handler(handle_introduce)
+
+
+    def introduce_yourself(self,bot,update):
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
+        msg = [
+            "Welcome to Friends Only Daddelstube",
+            "Iam Fobot i serve the server community by tracking maps, handling server data and calculating the map pool",
+            "Please help me and like maps with !like and dislike them with !dislike",
+            "If you need support, please send a ticket example: !ticket [your problem]",
+            ]
+
+        for row in msg:
+            self.server.just_say(row)
+            time.sleep(3)
+
 
     def toogle_talk(self,bot,update):
         message_id = update._effective_message.message_id
@@ -107,7 +128,6 @@ class TelegramBot:
         if userid not in self.admins:
             return False
         time_up = Database.get_total_minutes_up()
-        print(time_up)
         self.dispatcher.bot.sendMessage(self.chat_id, "FOBOT TIME TRACKED FOR {} min".format(time_up))
 
     def set_vip(self,bot,update):
@@ -189,7 +209,6 @@ Please use me responsible\n
             if re.match(r'^STEAM_',player.steam_id):
                 try:
                     minutes_played = Database.get_minutes_played(player.id)
-                    print(minutes_played)
                 except Exception as db_Exception:
                     minutes_played = "Cant get Time for Player"
                     print(db_Exception)

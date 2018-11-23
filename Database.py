@@ -15,6 +15,7 @@ class Maps(db.Entity):
     played = Required(int, sql_default=True, default=0)
     status = Set('ServerStatus')
     votes = Set('Votes')
+    down_votes = Set('DownVotes')
     value = Required(int, sql_default=True, default=1000)
 
 
@@ -23,11 +24,11 @@ class Player(db.Entity):
     first_saw = Required(datetime)
     steam_id = Required(str,unique=True)
     name = Required(str)
-    voted = Required(int, sql_default=True, default=0)
-    votes = Set('Votes')
+    voted_up = Set('Votes')
+    down_voted = Set('DownVotes')
     player_status = Set('PlayerStatus')
-    multi = Required(int,sql_default=True,default=1)
-    vip = Required(bool,sql_default=True,default=False)
+    multi = Required(int, sql_default=True, default=1)
+    vip = Required(bool, sql_default=True, default=False)
 
 
 class PlayerStatus(db.Entity):
@@ -41,26 +42,11 @@ class Votes(db.Entity):
     voted = Required('Maps')
     player = Required('Player')
 
-    @staticmethod
-    def add_vote(vote,player):
-        if type(vote) == str:
-            map_voted= Maps.get(name=vote)
-        elif type(vote) == int:
-            map_voted =Maps[vote]
-        else:
-            map_voted = vote
 
-        if type(player) == str:
-            player_voted = Player.get(name=player)
-        elif type(player) == int:
-            player_voted= Player[player]
-        else:
-            player_voted= player
-
-        if Votes.exists(player=player_voted,voted=map_voted):
-            return Votes.get(player=player_voted,voted=map_voted)
-
-        return Votes(voted=map_voted, player=player_voted)
+class DownVotes(db.Entity):
+    id = PrimaryKey(int,auto=True)
+    voted = Required('Maps')
+    player = Required('Player')
 
 
 class ServerStatus(db.Entity):
@@ -74,6 +60,39 @@ class ServerStatus(db.Entity):
 db.bind(provider="sqlite", filename='server.db', create_db=True)
 db.generate_mapping(create_tables=True)
 set_sql_debug(False)
+
+
+@db_session
+def create_votes(name,map,choice):
+    if name == "Console":
+        if not Player.exists(name=name):
+            player = add_player(datetime.utcnow(),name,steam_id='STEAM_TEST_CONSOLE')
+        else:
+            player = Player.get(name=name)
+    else:
+        player = Player.get(name=name)
+    map_voted = Maps.get(name=map)
+
+    if choice:
+        if DownVotes.exists(player=player, voted = map_voted):
+            ex_vote = DownVotes.get(player=player, voted=map_voted)
+            ex_vote.delete()
+        if Votes.exists(player=player, voted=map_voted):
+            ex_vote = Votes.get(player=player, voted=map_voted)
+            ex_vote.delete()
+            return "Player {} does not like to play {} anymore".format(player.name,map_voted.name)
+        Votes(voted=map_voted, player=player)
+        return "Player {} likes to play {}".format(player.name,map_voted.name)
+    else:
+        if Votes.exists(player=player,voted=map_voted):
+            ex_vote = Votes.get(player=player,voted=map_voted)
+            ex_vote.delete()
+        if DownVotes.exists(player=player, voted=map_voted):
+            ex_vote = DownVotes.get(player=player,voted=map_voted)
+            ex_vote.delete()
+            return "Player {} does not dislike to play {} anymore".format(player.name,map_voted.name)
+        DownVotes(voted=map_voted, player=player)
+        return "Player {} dislikes to play {}".format(player.name,map_voted.name)
 
 
 @db_session
@@ -303,10 +322,9 @@ def print_all_server_status():
     for x in get_all_server_status():
         try:
             msg = "Bots: {} Human: {} Date: {} Map: {} Played: {}".format(x.bots,x.human,x.date,x.current_map.name,x.current_map.played)
-            print(msg)
         except Exception:
             print("Error cant print status")
-            print(x)
+
 
 @db_session
 def create_test_user():
@@ -323,6 +341,6 @@ def database_create_maps(map_list):
 def print_all_maps():
     for x in get_all_maps():
         msg = "{} {} {}".format(x.name, x.played, x.value)
-        print(msg)
+
 
 
