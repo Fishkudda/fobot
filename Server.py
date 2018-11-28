@@ -150,6 +150,7 @@ class Server:
 
         output = []
         ret_counter = 4
+        print('Enter')
 
         while (self.cap_time not in output) and (cap_time not in output) and (ret_counter >= 0):
             try:
@@ -189,48 +190,51 @@ class Server:
         player_list = Database.get_all_player()
 
         player_dic = {player.name: player for player in player_list}
+        try:
+            player_names = [re.escape(player.name+':') for player in player_list]
+            j_names = r'|'.join(player_names)
+        except Exception as Exception_create_regex:
+            print("Fail creating regex")
+            print(Exception_create_regex)
+            return False
 
-        player_names = [player.name+':' for player in player_list]
-        j_names = r'|'.join(player_names)
-        compile_regx = re.compile(j_names)
+        msg = ""
+        data_input.reverse()
 
-        if data_input:
-            msg = ""
-            data_input.reverse()
+        for line in data_input:
 
-            for line in data_input:
-                if re.search(compile_regx, line) or re.match(r'Console:', line):
-                    msg = msg + "{}\n".format(line)
-                    if line.split(':')[-1].strip() == '!like':
-                        name = line.split(':')[0].strip()
-                        if '*DEAD*' in name:
-                            name = "".join(name.split('*')[3:]).strip()
-                        voted_msg = Database.create_votes(name, self.current_map, True)
-                        self.just_say(voted_msg)
-                    if line.split(':')[-1].strip() == '!dislike':
-                        name = line.split(':')[0].strip()
-                        if '*DEAD*' in name:
-                            name = "".join(name.split('*')[3:]).strip()
-                        voted_msg = Database.create_votes(name,self.current_map, False)
-                        self.just_say(voted_msg)
-
-                    index = 0
-                    name = line.split(':')[index].strip()
-
+            if re.search(j_names, line) or re.match(r'Console:', line):
+                msg = msg + "{}\n".format(line)
+                if line.split(':')[-1].strip() == '!like':
+                    name = line.split(':')[0].strip()
                     if '*DEAD*' in name:
-                        index = 3
-                        name = "".join(name.split('*')[index:]).strip()
-                    print(name)
+                        name = "".join(name.split('*')[3:]).strip()
+                    voted_msg = Database.create_votes(name, self.current_map, True)
+                    self.just_say(voted_msg)
+                if line.split(':')[-1].strip() == '!dislike':
+                    name = line.split(':')[0].strip()
+                    if '*DEAD*' in name:
+                        name = "".join(name.split('*')[3:]).strip()
+                    voted_msg = Database.create_votes(name,self.current_map, False)
+                    self.just_say(voted_msg)
 
-                    if (name in player_dic.keys()) or (name == "Console"):
-                        first_w = line.split(':')[index+1].split(' ')[1]
-                        if '!ticket' == first_w:
-                            self.telegram_bot.dispatcher.bot.sendMessage(
-                                self.telegram_bot.chat_id, text="{} TICKET  FROM: {}\nTEXT: {}".format(datetime.datetime.utcnow().strftime('%c'),name,line))
-                            self.just_say("Your Ticket {} was send.".format(name))
+                index = 0
+                name = line.split(':')[index].strip()
 
-            if msg != "" and self.telegram_bot.talk:
-                self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id, text=msg)
+                if '*DEAD*' in name:
+                    index = 3
+                    name = "".join(name.split('*')[index:]).strip()
+                print(name)
+
+                if (name in player_dic.keys()) or (name == "Console"):
+                    first_w = line.split(':')[index+1].split(' ')[1]
+                    if '!ticket' == first_w:
+                        self.telegram_bot.dispatcher.bot.sendMessage(
+                            self.telegram_bot.chat_id, text="{} TICKET  FROM: {}\nTEXT: {}".format(datetime.datetime.utcnow().strftime('%c'),name,line))
+                        self.just_say("Your Ticket {} was send.".format(name))
+
+        if msg != "" and self.telegram_bot.talk:
+            self.telegram_bot.dispatcher.bot.sendMessage(self.telegram_bot.chat_id, text=msg)
 
     def update(self):
         os.system('screen -ls > /tmp/screenoutput')
@@ -407,6 +411,7 @@ class Server:
             '%c') + " UPDATE DONE")
 
         self.update_counter = self.update_counter + 1
+        #Database.calculate_next_map_pool()
 
         return self
 

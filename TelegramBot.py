@@ -212,7 +212,7 @@ Please use me responsible\n
                 except Exception as db_Exception:
                     minutes_played = "Cant get Time for Player"
                     print(db_Exception)
-                msg = msg + player.name + '\n' + player.steam_id + 'Time:{}min\n'.format(str(round(minutes_played)))+'Share: {}%\n'.format(round(Database.time_weight_player(player.id)))+'\n'
+                msg = msg + player.name + '\n' + player.steam_id + '\nTime:{}min\n'.format(str(round(minutes_played)))+'Share: {}%\n'.format(round(Database.time_weight_player(player.id)))+'\n'
 
         partial = math.ceil(len(msg)/2000)
 
@@ -273,7 +273,10 @@ Please use me responsible\n
             all_times = 1
 
         for the_map in maps:
-            msg = msg + the_map.name+' share: '+str(round(the_map.played/all_times*100)) +'%\n'
+
+            status_voted = Database.get_likes_dislikes(the_map)
+
+            msg = msg + the_map.name+' share: '+str(round(the_map.played/all_times*100)) +'%\n'+'Liked:{}\nDisliked:{}\n'.format(status_voted[0],status_voted[1])
 
         self.dispatcher.bot.sendMessage(chat_id=self.chat_id,text=msg)
 
@@ -296,6 +299,7 @@ Please use me responsible\n
         self.dispatcher.bot.sendMessage(chat_id=update.message.chat.id, text=update.message.chat.id)
 
     def request_update(self, bot, update):
+        print(update)
         userid = update.message.from_user.id
 
         if (userid not in self.admins) and (userid not in self.admins):

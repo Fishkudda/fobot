@@ -61,6 +61,12 @@ db.bind(provider="sqlite", filename='server.db', create_db=True)
 db.generate_mapping(create_tables=True)
 set_sql_debug(False)
 
+@db_session
+def get_likes_dislikes(the_map):
+    down_voted = len(select(map_v for map_v in DownVotes if map_v.voted == the_map))
+    up_voted = len(select(map_v for map_v in Votes if map_v.voted == the_map))
+    return (up_voted, down_voted)
+
 
 @db_session
 def create_votes(name,map,choice):
@@ -155,17 +161,75 @@ def get_total_minutes_up():
 
 
 @db_session
-def get_minutes_players_tracked():
-    res = select(status for status in ServerStatus if status.human >= 2)
-    return (len(res)*30)/60
+def get_minutes_players():
+    all_player = select(player for player in Player if player.steam_id[0] != 'N')
+    return sum([get_minutes_played(player)for player in all_player])
+
+@db_session
+def calculate_next_map_pool(list_of_players):
+    list_of_players = [Player.get(steam_id=player.steam_id) for player in list_of_players if not player.is_bot]
+    all_maps = get_maps_by_played()
+    all_times_played = sum([map_v.played for map_v in all_maps])
+    if all_times_played == 0:
+        return [Maps.get(name='de_dust2'),Maps.get(name='cs_office')]
+
+    maps_value_list =[]
+    for map_v in all_maps:
+        map_value = 0
+        list_of_players = sorted(list_of_players,key=lambda time: get_minutes_played(time),reverse=True)
+
+        for index,player in enumerate(list_of_players):
+            res = map_v.value
+            vip = player.vip
+            player_liked_map = Votes.exists(player=player, voted=map_v)
+            player_disliked_map = DownVotes.exists(player=player, voted=map_v)
+
+            if player_liked_map:
+                if vip:
+                    res = res*1.3
+                else:
+                    res = res*1.2
+
+            if player_disliked_map:
+                if vip:
+                    res = res*0.7
+                else:
+                    res = res*0.8
+
+            if index in [0,1,2,3]:
+                res = res * 1.2
+            elif index in [4 , 5, 6, 7]:
+                res = res * 1
+            elif index in [8,9,10,11]:
+                res = res * 0.9
+            elif index in [12,13,14,15,16]:
+                res = res*0.8
+            else:
+                res = res*0.7
+
+            map_value = map_value + res
+
+        maps_value_list.append((map_value,map_v))
+
+    def take_value(entry):
+        return entry[1]
+
+    sorted_by_value = sorted(maps_value_list, key=take_value, reverse=True)
+    print(sorted_by_value)
+    result_list= []
+    for i in range(3):
+        result_list.append(sorted_by_value[i][0])
+    print(result_list)
+    return result_list
+
 
 
 @db_session
 def time_weight_player(player):
 
-    player_tracked = get_minutes_players_tracked()
+    all_player_time = get_minutes_players()
 
-    if player_tracked == 0:
+    if all_player_time == 0:
         return 0
 
     if type(player) == str:
@@ -173,21 +237,21 @@ def time_weight_player(player):
             p = Player.get(steam_id=player)
             p_t = get_minutes_played(p)
 
-            return (p_t/player_tracked)*100
+            return (p_t/all_player_time)*100
         else:
             p = Player.get(name=player)
             p_t = get_minutes_played(p)
 
-            return (p_t / player_tracked) * 100
+            return (p_t / all_player_time) * 100
 
     elif type(player) == int:
         p = Player.get(id=player)
         p_t = get_minutes_played(p)
-        return (p_t / player_tracked) * 100
+        return (p_t / all_player_time) * 100
 
     elif type(player) == Player:
         p_t = get_minutes_played(Player)
-        return (p_t / player_tracked) * 100
+        return (p_t / all_player_time) * 100
 
 
 @db_session
