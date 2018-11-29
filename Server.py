@@ -47,6 +47,24 @@ class Server:
                                                                     self.get_number_of_players(),
                                                                     self.get_number_of_bots())
 
+    def load_cfg(self, cfg):
+        move_cfg = "cp {}  {}/csgo/cfg/{}".format(cfg.path, PATH_TO_SERVER,
+                                                  cfg.name)
+        res = os.system(move_cfg)
+        if res != 0:
+            return "Error cant move file from {} to {}".format_map(cfg.path, PATH_TO_SERVER)
+
+        exec_cfg = "screen -S {} -X stuff 'exec {}\r'".format(self.screen_id,
+                                                              cfg.name)
+        res_exec = os.system(exec_cfg)
+
+        if res_exec == 0:
+            return "Executes {} Cfg".format(cfg.name)
+        else:
+            return "Error cant exec {}".format(cfg.name)
+
+
+
     def change_level(self, name_id):
         sys_var = "screen -S {} -X stuff 'changelevel {}\r'".format(
             self.screen_id,
@@ -139,7 +157,7 @@ class Server:
         if self.screen_id == "":
             return False
 
-        cap_time = str(datetime.datetime.utcnow())+'\n'
+        cap_time = "echo "+str(datetime.datetime.utcnow())+'\n'
         sys_var = "screen -S {} -X stuff '{}\r'".format(screen_id, cap_time)
         if not self.cap_time:
             self.cap_time = cap_time
@@ -150,7 +168,6 @@ class Server:
 
         output = []
         ret_counter = 4
-        print('Enter')
 
         while (self.cap_time not in output) and (cap_time not in output) and (ret_counter >= 0):
             try:
@@ -374,7 +391,6 @@ class Server:
 
                 Database.create_player_status(datetime.datetime.utcnow(), name,
                                               steam_id)
-
 
             elif (s_text[0] == '#' and re.match(r'^[0-9]',s_text[2])):
                 i = 0

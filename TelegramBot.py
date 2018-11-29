@@ -6,12 +6,16 @@ import Database
 import re
 import math
 import time
+import requests
+import io
+import shutil
 
 ADMINS = [651421362,742523989,85438832]
 USERS = [651421362,742523989,85438832]
 
 class TelegramBot:
     def __init__(self, token, chat_id,debug=False):
+        self.token = token
         self.updater = Updater(
             token=token)
         self.updater.start_polling()
@@ -34,6 +38,7 @@ class TelegramBot:
                          'Map Stats',
                          'Players']
         self.talk = False
+
 
 
         # Command Handler
@@ -59,9 +64,11 @@ class TelegramBot:
         handle_total_up = CommandHandler('total_up',self.total_up)
         handle_talk = CommandHandler('talk',self.toogle_talk)
         handle_introduce = CommandHandler('introduce',self.introduce_yourself)
+        handle_cfg_loader = CommandHandler('load_cfg',self.cfg_loader)
 
         # Message Handler
         message_handler = MessageHandler(Filters.text, self.request_update)
+        file_handler = MessageHandler(Filters.document,self.upload_file)
 
         self.dispatcher.add_handler(handle_send_id)
         self.dispatcher.add_handler(handle_get_chat_id)
@@ -87,6 +94,69 @@ class TelegramBot:
         self.dispatcher.add_handler(handle_total_up)
         self.dispatcher.add_handler(handle_talk)
         self.dispatcher.add_handler(handle_introduce)
+        self.dispatcher.add_handler(handle_cfg_loader)
+        self.dispatcher.add_handler(file_handler)
+
+
+    def upload_file(self,bot,update):
+        message_id = update._effective_message.message_id
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
+
+        file_name = update.message.document.file_name
+        file_type = update.message.document.mime_type
+        file_id = update.message.document.file_id
+        file_size = update.message.document.file_size
+
+        get_file_path = "https://api.telegram.org/bot{}/getFile?file_id={}".format(self.token,file_id)
+
+        result = requests.get(get_file_path)
+        file_path = result.json()['result']['file_path']
+
+        download_file = "https://api.telegram.org/file/bot{}/{}".format(self.token,file_path)
+
+        download_file_result = requests.get(download_file, stream=True)
+
+        file = io.BytesIO(download_file_result.content)
+
+        if file_name.split('_')[0] != "fobot":
+            return False
+
+        if file_type == "text/x-csrc":
+            path_to_save = "cfg_files/{}".format(file_name)
+            with open(path_to_save,'wb') as f:
+                f.write(file.read())
+            msg = "{} uploaded".format(file_name)
+            self.dispatcher.bot.sendMessage(chat_id=self.chat_id, text=msg)
+
+            return msg
+
+
+
+    def cfg_loader(self,bot,update):
+        message_id = update._effective_message.message_id
+        userid = update.message.from_user.id
+
+        if userid not in self.admins:
+            return False
+
+        cfgs = FobotCfg.get_all_cfgs()
+        custom_keyboard = []
+
+        for key in cfgs:
+            custom_keyboard.append([key])
+
+        reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard,
+                                                    selective=True,
+                                                    one_time_keyboard=True)
+
+        self.dispatcher.bot.sendMessage(chat_id=self.chat_id,
+                                        reply_markup=reply_markup,
+                                        reply_to_message_id=message_id,
+                                        text="Load Cfg")
+
 
 
     def introduce_yourself(self,bot,update):
@@ -121,7 +191,6 @@ class TelegramBot:
                                         reply_markup=reply_markup,
                                         text="Toogle Talk",
                                         reply_to_message_id=message_id)
-
 
     def total_up(self,bot,update):
         userid = update.message.from_user.id
@@ -343,6 +412,10 @@ Please use me responsible\n
             if update.message.text == "Players":
                 self.get_all_player(bot=bot, update=update)
 
+        if usecase == "Load Cfg":
+            result = self.server.load_cfg(FobotCfg.get_all_cfgs()[update.message.text])
+            self.dispatcher.bot.sendMessage(self.chat_id,result)
+
         if usecase == 'Set Vip':
             res = Database.set_vip(update.message.text)
             print(res.vip)
@@ -469,3 +542,49 @@ Please use me responsible\n
 
     def system_status(self,bot,update):
         pass
+
+
+class FobotCfg:
+    def __init__(self, path,name):
+        self.path = path
+        self.name = name
+        self.description = self.get_description()
+
+    def __repr__(self):
+        return "Name:{} Description:{} Path{}".format(self.name,
+                                                          self.description,
+                                                          self.path)
+
+    def get_description(self):
+        try:
+            text = ""
+            with open(self.path) as file:
+                cfg = file.readline()
+
+            if len(cfg) < 2:
+                return text
+
+            if re.match(r'^//', cfg[0]):
+                text = text + cfg[0][1:]
+            if re.match(r'^//', cfg[1]):
+                text = text +'\n'+ cfg[0][1:]
+            return text
+        except Exception as fail_to_get:
+            print(fail_to_get)
+            return ""
+
+    @staticmethod
+    def get_all_cfgs():
+        current_directory = os.getcwd()
+        walk_path = "{}/cfg_files/.".format(current_directory)
+        cfgs = {}
+        for root, dirs, files in os.walk(walk_path):
+            for file in files:
+                file_path = "{}/cfg_files/{}".format(current_directory,file)
+                cfgs[file] = FobotCfg(path=file_path, name=file)
+        return cfgs
+
+
+
+
+
